@@ -10,19 +10,19 @@ class MailingSettings(models.Model):
         ('daily', 'Раз в день'),
         ('weekly', 'Раз в неделю'),
         ('monthly', 'Раз в месяц'),
-    ))
+    ), verbose_name='периодичность')
     status = models.CharField(max_length=300, choices=(
         ('completed', 'Завершено'),
         ('created', 'Создано'),
         ('launched', 'Запущенно'),
-    ))
-
-    def __str__(self):
-        return f'{self.start_date} - {self.finish_date}'
+    ), verbose_name='статус')
 
     class Meta:
         verbose_name = "настройка"
         verbose_name_plural = "настройки"
+
+    def __str__(self):
+        return f'{self.start_date} - {self.finish_date}'
 
 
 
@@ -39,6 +39,7 @@ class MailingMessage(models.Model):
         return f'{self.theme}, {self.body}'
 
 
+
 class MailingLog(models.Model):
     mailing = models.ForeignKey(MailingSettings, on_delete=models.CASCADE, verbose_name="лог рассылки")
     last_date_time = models.DateTimeField(auto_now_add=True, verbose_name="последняя отправка")
@@ -51,4 +52,7 @@ class MailingLog(models.Model):
     class Meta:
         verbose_name = 'лог'
         verbose_name_plural = 'логи'
+
+    def __str__(self):
+        return f'{self.last_date_time} - {self.status}: {self.server_response}'
 
